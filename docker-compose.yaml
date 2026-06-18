@@ -1,0 +1,32 @@
+services:
+  postgres-database:
+    image: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "15432:5432"
+    volumes:
+      - PostgreSQL:/var/lib/postgresql
+    networks:
+      - postgres-database-network
+
+  pgadmin-service:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres-database
+    networks:
+      - postgres-database-network
+
+volumes:
+  PostgreSQL:
+
+networks:
+  postgres-database-network:
+    driver: bridge
